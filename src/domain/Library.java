@@ -1,8 +1,12 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+
+import exceptions.EmprestimoExpiradoException;
 
 public class Library{
 
@@ -13,6 +17,10 @@ public class Library{
 	private List<Funcionario> funcionarios;
 	
 	private List<Sessao<Livro>> sessoesLivros;
+	
+	private List<Sessao<Artigo>> sessoesAtigos;
+	
+	private Map<Usuario, List<Emprestimo>> mapEmprestimosUsuario;
 	
 	public Library() {
 		usuarios = new ArrayList<>();
@@ -59,6 +67,22 @@ public class Library{
 		this.sessoesLivros = sessoesLivros;
 	}
 
+	public List<Sessao<Artigo>> getSessoesAtigos() {
+		return sessoesAtigos;
+	}
+
+	public void setSessoesAtigos(List<Sessao<Artigo>> sessoesAtigos) {
+		this.sessoesAtigos = sessoesAtigos;
+	}
+
+	public Map<Usuario, List<Emprestimo>> getMapEmprestimosUsuario() {
+		return mapEmprestimosUsuario;
+	}
+
+	public void setMapEmprestimosUsuario(Map<Usuario, List<Emprestimo>> mapEmprestimosUsuario) {
+		this.mapEmprestimosUsuario = mapEmprestimosUsuario;
+	}
+
 	public Funcionario logAs(String matricula) {
 		return buscaFuncionario(matricula);
 	}
@@ -88,6 +112,58 @@ public class Library{
 	public void imprimeListaPublicacoes() {
 		for(var publi : listaPublicacoesLivres()) {
 			System.out.printf("%s - %sª edição (%d) \n", publi.getNome(),publi.getEdicao(),publi.getAno());
+		}
+	}
+	
+	public void emprestarPublicacao(Funcionario funcionario, Usuario usuario, Publicacao publicacao) {
+		if(publicacoes.contains(publicacao)) {
+			var emprestimo = new Emprestimo();
+			emprestimo.setDataEmprestimo(new Date());
+			emprestimo.setFuncionarioResponsavel(funcionario);
+			emprestimo.setPublicacao(publicacao);
+			emprestimo.setUsuario(usuario);
+			if(mapEmprestimosUsuario.get(usuario) == null) {
+				mapEmprestimosUsuario.put(usuario, new ArrayList<>());
+			}
+			mapEmprestimosUsuario.get(usuario).add(emprestimo);
+			publicacao.setAlugada(true);
+		}else {
+			System.out.println("Esta publicação não esta no acervo da biblioteca.");
+		}
+	}
+	
+	public void devolverPublicacao(Usuario usuario, Publicacao publicacao) {
+		var emprestimos = mapEmprestimosUsuario.get(usuario);
+		if(emprestimos == null || emprestimos.isEmpty()) {
+			return;
+		}
+		for(var emprestimo : emprestimos) {
+			if(emprestimo.getPublicacao().equals(publicacao)) {
+				try {
+					publicacoes.add(emprestimo.devolverPublicacao());
+					publicacao.setAlugada(false);
+				}catch(EmprestimoExpiradoException ex) {
+					System.out.println(ex.getMessage());
+				}
+			}
+		}
+		
+	}
+	
+	public void renovarPublicacao(Funcionario funcionario, Usuario usuario, Publicacao publicacao) {
+		var emprestimos = mapEmprestimosUsuario.get(usuario);
+		if(emprestimos == null || emprestimos.isEmpty()) {
+			return;
+		}
+		
+		for(var emprestimo : emprestimos) {
+			if(emprestimo.getPublicacao().equals(publicacao)) {
+				try {
+					emprestimo.renovarPublicacao();
+				}catch(EmprestimoExpiradoException ex) {
+					System.out.println(ex.getMessage());
+				}
+			}
 		}
 	}
 }

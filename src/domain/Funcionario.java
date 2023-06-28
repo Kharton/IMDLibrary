@@ -42,7 +42,7 @@ public class Funcionario extends Pessoa{
 		}
 	}
 	
-	public void registrarUsuario(Usuario usuario, List<Usuario> lista) {
+	public void cadastrarUsuario(Usuario usuario, List<Usuario> lista) {
 		if(usuario != null) {
 			if(lista == null)
 				lista = new ArrayList<>();

@@ -2,13 +2,13 @@ package domain;
 
 import java.util.List;
 
-public class Sessao<T> implements GrupoPublicacao<T> {
+public class Pratileira<T> implements GrupoPublicacao<T> {
 		
 	private List<T> arquivos;
 	
 	private String localizacao;
 
-	public Sessao(List<T> arquivos, String localizacao) {
+	public Pratileira(List<T> arquivos, String localizacao) {
 		this.arquivos = arquivos;
 		this.localizacao = localizacao;
 	}
