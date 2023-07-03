@@ -2,7 +2,7 @@
 
 Este é um projeto para a disciplina de LP2, um exemplo de sistema de biblioteca desenvolvida em Java utilizando os conceitos vistos em aula.
 
-## Para compilar:
+## Para compilar
 
 1. Abra um terminal ou prompt de comando.
 2. Navegue até o diretório raiz do projeto "IMDLibrary".

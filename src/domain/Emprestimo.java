@@ -25,10 +25,11 @@ public class Emprestimo {
 	
 	public Publicacao devolverPublicacao() throws EmprestimoExpiradoException {
 		if((new Date()).after(dataExpiracao)){
-			throw new EmprestimoExpiradoException("Regularize o empréstimo antes de realizar a devolução");
+			throw new EmprestimoExpiradoException("Regularize o emprestimo antes de realizar a devolucao");
 		}
 		finalizado = true;
 		return publicacao;
+
 	}
 	
 	public void renovarPublicacao() throws EmprestimoExpiradoException {
@@ -67,7 +68,10 @@ public class Emprestimo {
 	}
 
 	public void setDataExpiracao(Date dataExpiracao) {
-		this.dataExpiracao = dataExpiracao;
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(dataExpiracao);
+		calendar.add(Calendar.DAY_OF_YEAR, 7);
+		this.dataExpiracao = calendar.getTime();
 	}
 	
 	public Funcionario getFuncionarioResponsavel() {

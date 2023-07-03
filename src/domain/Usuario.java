@@ -59,10 +59,10 @@ public class Usuario extends Pessoa{
 
 	private void verificaCondicoesAluguel() throws LimiteAlugueisException, MenorIdadeException {
 		if(alugueis != null && limiteAlugueis < alugueis.size()) {
-			throw new LimiteAlugueisException("O usuário já alugou o número máximo de publicações.");
+			throw new LimiteAlugueisException("O usuario ja alugou o numero máximo de publicacoes.");
 		}
 		if(getIdade() < 18) {
-			throw new MenorIdadeException("Apenas maiores de idade podem alugar publicações.");
+			throw new MenorIdadeException("Apenas maiores de idade podem alugar publicacoes.");
 		}
 	}
 }

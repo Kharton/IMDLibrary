@@ -3,6 +3,7 @@ package domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,6 +28,7 @@ public class Library{
 		publicacoes = new ArrayList<>();
 		funcionarios = new ArrayList<>();
 		sessoesLivros = new ArrayList<>();
+		mapEmprestimosUsuario = new HashMap<>();
 	}
 
 	public Library(List<Funcionario> funcionarios, List<Usuario> usuario, List<Publicacao> publicacoes) {
@@ -111,24 +113,30 @@ public class Library{
 	
 	public void imprimeListaPublicacoes() {
 		for(var publi : listaPublicacoesLivres()) {
-			System.out.printf("%s - %sª edição (%d) \n", publi.getNome(),publi.getEdicao(),publi.getAno());
+			System.out.printf("%s - %sª edicao (%d) \n", publi.getNome(),publi.getEdicao(),publi.getAno());
 		}
 	}
 	
 	public void emprestarPublicacao(Funcionario funcionario, Usuario usuario, Publicacao publicacao) {
 		if(publicacoes.contains(publicacao)) {
-			var emprestimo = new Emprestimo();
-			emprestimo.setDataEmprestimo(new Date());
-			emprestimo.setFuncionarioResponsavel(funcionario);
-			emprestimo.setPublicacao(publicacao);
-			emprestimo.setUsuario(usuario);
-			if(mapEmprestimosUsuario.get(usuario) == null) {
-				mapEmprestimosUsuario.put(usuario, new ArrayList<>());
+			if (!publicacao.isAlugada()) {
+				var emprestimo = new Emprestimo();
+				emprestimo.setDataEmprestimo(new Date());
+				emprestimo.setDataExpiracao(new Date());
+				emprestimo.setFuncionarioResponsavel(funcionario);
+				emprestimo.setPublicacao(publicacao);
+				emprestimo.setUsuario(usuario);
+				if(mapEmprestimosUsuario.get(usuario) == null) {
+					mapEmprestimosUsuario.put(usuario, new ArrayList<>());
+				}
+				mapEmprestimosUsuario.get(usuario).add(emprestimo);
+				publicacao.setAlugada(true);
+				System.out.println("Publicacao " + publicacao.getNome() + " emprestada para " + usuario.getNome() + ".");
+			} else {
+				System.out.println("Esta publicacao ja esta alugada.");
 			}
-			mapEmprestimosUsuario.get(usuario).add(emprestimo);
-			publicacao.setAlugada(true);
-		}else {
-			System.out.println("Esta publicação não esta no acervo da biblioteca.");
+		} else {
+			System.out.println("Esta Publicacao não esta no acervo da biblioteca.");
 		}
 	}
 	
@@ -142,6 +150,7 @@ public class Library{
 				try {
 					publicacoes.add(emprestimo.devolverPublicacao());
 					publicacao.setAlugada(false);
+					System.out.println("Publicacao " + publicacao.getNome() + " devolvida por " + usuario.getNome() + ".");
 				}catch(EmprestimoExpiradoException ex) {
 					System.out.println(ex.getMessage());
 				}
