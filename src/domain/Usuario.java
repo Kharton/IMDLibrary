@@ -65,4 +65,19 @@ public class Usuario extends Pessoa{
 			throw new MenorIdadeException("Apenas maiores de idade podem alugar publicacoes.");
 		}
 	}
+        
+        
+        public void clone(Usuario user){
+            this.alugueis = user.getAlugueis();
+            this.login = user.getLogin();
+            setNome(user.getNome());
+            setRG(user.getRG());
+            setCPF(user.getCPF());
+            setIdade(user.getIdade());
+        }
+
+	@Override
+	public String toString() {
+		return getNome() + " (" + getCPF() + ")";
+	}
 }

@@ -29,4 +29,10 @@ public class Artigo extends Publicacao{
 	public void setConclusao(String conclusao) {
 		this.conclusao = conclusao;
 	}
+
+	public void clone(Artigo obj) {
+            super.clone(obj);
+            this.conclusao = obj.getConclusao();
+            this.resumo = obj.getResumo();
+	}
 }

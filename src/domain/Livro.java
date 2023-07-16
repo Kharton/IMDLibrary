@@ -40,4 +40,17 @@ public class Livro extends Publicacao{
 	public void setSinopse(String sinopse) {
 		this.sinopse = sinopse;
 	}
+
+	public void clone(Livro obj) {
+            super.clone(obj);
+            this.editora = obj.getEditora();
+            this.isbn = obj.getISBN();
+            this.sinopse = obj.getSinopse();
+	}
+	
+	@Override
+	public String toString() {
+            return getNome() +", "+ getEdicao()+"ª ed ("+getEditora()+"-" + getAno()
+                            + ")" + (isAlugada()?"✕":"✓") ;
+	}
 }

@@ -84,4 +84,20 @@ public class Publicacao{
 	public void setAlugada(boolean alugada) {
 		this.alugada = alugada;
 	}	
+        
+        public void clone(Publicacao obj){
+            setNome(obj.getNome());
+            setEdicao(obj.getEdicao());
+            setAno(obj.getAno());
+            setAutores(obj.getAutores());
+            setTexto(obj.getTexto());
+            setPaginas(obj.getPaginas());
+            setAlugada(obj.isAlugada());
+        }
+	
+	@Override
+	public String toString() {
+		return getNome() +", "+ getEdicao()+"ª ed (" + getAno()
+				+ ") " + (isAlugada()?"✕":"✓") ;
+	}
 }
